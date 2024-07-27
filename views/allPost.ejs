@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title><%= title %></title>
+		<link rel="stylesheet" href="/stylesheets/styles.css" />
+	</head>
+	<body>
+		<header class="header" id="header">
+			<nav class="nav container">
+				<a href="http://localhost:3000/home" class="nav__logo">nft.io</a>
+
+				<div class="nav__menu" id="nav-menu">
+					<ul class="nav__list">
+						<li class="nav__item">
+							<a href="#!" class="nav__link active-link">Home</a>
+						</li>
+						<li class="nav__item">
+							<a href="http://localhost:3000/allPost" class="nav__link"
+								>All Post</a
+							>
+						</li>
+						<li class="nav__item">
+							<a href="http://localhost:3000/" class="nav__link">Sign out</a>
+						</li>
+					</ul>
+
+					<!-- close button -->
+					<div class="nav__close" id="nav-close">
+						<i class="ri-close-line"></i>
+					</div>
+					<img src="./images/ethereum-img.png" alt="nav img" class="nav__img" />
+				</div>
+
+				<!-- Toggle button -->
+				<div class="nav__toggle" id="nav-toggle">
+					<i class="ri-menu-4-line"></i>
+				</div>
+			</nav>
+		</header>
+
+		<div id="app">
+			<h1 id="app-heading"><%= title %></h1>
+			<div id="app-content">
+				<div class="container">
+					<div id="post-list">
+						<% if (posts.length > 0) { %> <% posts.forEach(post => { %>
+						<div class="post">
+							<h4>Post ID: <%= post.id %></h4>
+							<h3><%= post.title %></h3>
+							<p><%= post.description %></p>
+							<h5><%= post.taskDate %></h5>
+							<div class="comment-count">
+								<span>Comments</span>
+							</div>
+						</div>
+						<% }); %> <% } else { %>
+						<p>No tasks available.</p>
+						<% } %>
+					</div>
+
+					<div class="pagination">
+						<% if (typeof currentPage !== 'undefined' && currentPage > 1) { %>
+						<a href="?page=<%= currentPage - 1 %>">Previous</a>
+						<% } %> <% if (typeof maxPageCount !== 'undefined') { %> <% for (let
+						i = 1; i <= maxPageCount; i++) { %>
+						<a
+							href="?page=<%= i %>"
+							class="<%= i === currentPage ? 'active' : '' %>"
+							><%= i %></a
+						>
+						<% } %> <% } %> <% if (typeof currentPage !== 'undefined' &&
+						currentPage < maxPageCount) { %>
+						<a href="?page=<%= currentPage + 1 %>">Next</a>
+						<% } %>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

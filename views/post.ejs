@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Create Task</title>
+		<link rel="stylesheet" href="./stylesheets/post.css" />
+	</head>
+	<body>
+		<div id="app">
+			<h1 id="app-heading">Create a Task</h1>
+			<div id="app-content">
+				<div class="container">
+					<form id="task-form" method="post" action="/createPost">
+						<div class="form-group">
+							<label for="task-title">Title:</label>
+							<input type="text" id="task-title" name="title" required />
+						</div>
+						<div class="form-group">
+							<label for="task-description">Description:</label>
+							<textarea
+								id="task-description"
+								name="description"
+								rows="5"
+								required
+							></textarea>
+						</div>
+						<div class="form-group">
+							<label for="task-date">Task Date:</label>
+							<input type="date" id="task-date" name="taskDate" required />
+						</div>
+
+						<button type="submit" class="submit-button">Submit Task</button>
+					</form>
+					<div id="confirmation-message" class="hidden">
+						<span class="checkmark">&#10003;</span>
+						<p style="color: #333">Your post has been submitted!</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
