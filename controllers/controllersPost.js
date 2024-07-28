@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid'
 import validate from '../utils/validate.js'
 function post(req, res, next) {
-	res.render('post', {
+	res.render('createPost', {
 		title: 'post',
 	})
 }
@@ -13,9 +13,8 @@ function createPost(req, res) {
 		const errors = validate.createTask(req)
 
 		if (errors.haveErrors) {
-			res.status(422).json({
-				errors: errors.fields,
-				message: 'Validation error',
+			res.render('createPost', {
+				errors: JSON.stringify(errors.fields, null, 2),
 			})
 			return
 		}
@@ -24,8 +23,8 @@ function createPost(req, res) {
 		const allowToCreate = checkTaskDate(taskDate)
 
 		if (!allowToCreate) {
-			res.status(422).json({
-				message: 'You can create a task for same day max 3 times.',
+			res.render('createPost', {
+				info: 'You can create only 3 tasks per day',
 			})
 			return
 		}
@@ -39,7 +38,7 @@ function createPost(req, res) {
 		}
 
 		posts.push(newData)
-		res.status(200).render('allPost', {
+		res.status(200).render('getTasks', {
 			posts: posts,
 			title: 'All Posts',
 		})
@@ -71,17 +70,10 @@ function getTasks(req, res) {
 
 		const maxPageCount = Math.ceil(list.length / limit)
 
-		if (+page > maxPageCount || +page < 1) {
-			res.status(422).json({
-				message: 'Invalid page number',
-			})
-			return
-		}
-
 		const offset = (page - 1) * limit
 		list = list.slice(offset, offset + limit)
 
-		res.render('allPost', {
+		res.render('getTasks', {
 			posts: list,
 			currentPage: +page,
 			maxPageCount: maxPageCount,

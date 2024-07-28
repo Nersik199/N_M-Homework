@@ -13,6 +13,18 @@
 				<div class="container">
 					<form id="task-form" method="post" action="/createPost">
 						<div class="form-group">
+							<% if(typeof info !== 'undefined') { %>
+							<p
+								style="
+									font-size: 18px;
+									text-align: center;
+									color: rgb(236, 187, 114);
+								"
+							>
+								<%= info %>
+							</p>
+
+							<% } %>
 							<label for="task-title">Title:</label>
 							<input type="text" id="task-title" name="title" required />
 						</div>
@@ -29,7 +41,13 @@
 							<label for="task-date">Task Date:</label>
 							<input type="date" id="task-date" name="taskDate" required />
 						</div>
-
+						<% if (typeof errors !== 'undefined') { %>
+						<div class="error-message">
+							<p style="color: rgb(135, 213, 239); font-size: 18px">
+								<%= errors %>
+							</p>
+						</div>
+						<% } %>
 						<button type="submit" class="submit-button">Submit Task</button>
 					</form>
 					<div id="confirmation-message" class="hidden">
@@ -39,5 +57,21 @@
 				</div>
 			</div>
 		</div>
+		<script>
+			let isFormDirty = false
+			function markFormAsDirty() {
+				isFormDirty = true
+			}
+			function markFormAsClean() {
+				isFormDirty = false
+			}
+
+			window.addEventListener('beforeunload', function (e) {
+				if (isFormDirty) {
+					e.preventDefault()
+					e.returnValue = ''
+				}
+			})
+		</script>
 	</body>
 </html>
