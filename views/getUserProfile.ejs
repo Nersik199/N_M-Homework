@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="/stylesheets/styles.css" />
+		<title><%= title %></title>
+	</head>
+	<body>
+		<div id="app-content">
+			<h1><%= title %></h1>
+			<div class="container">
+				<div id="post-list">
+					<% if (usersList.length > 0) { %> <% usersList.forEach(user => { %>
+					<div class="post">
+						<h4>Post ID: <%= user.id %></h4>
+						<h3><%= user.email %></h3>
+						<p><%= user.fName %></p>
+						<p><%= user.lName %></p>
+						<h5><%= user.password %></h5>
+						<div class="comment-count">
+							<span>Updated</span>
+						</div>
+					</div>
+					<% }); %> <% } else { %>
+					<p><%= errorMessage %></p>
+					<% } %>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

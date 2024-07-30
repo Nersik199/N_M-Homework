@@ -44,9 +44,10 @@
 
 		<div id="app">
 			<h1 id="app-heading"><%= title %></h1>
+
 			<div class="form-container sign-in-container">
-				<form action="/getSinglePost" method="get">
-					<input type="text" name="id" placeholder="postId" required />
+				<form action="/getUserProfile" method="get">
+					<input type="email" name="email" placeholder="Email" required />
 
 					<% if (typeof errorMessage !== 'undefined') { %>
 					<div class="error-message">
@@ -58,22 +59,23 @@
 					<button type="submit">getUserProfile</button>
 				</form>
 			</div>
+
 			<div id="app-content">
 				<div class="container">
 					<div id="post-list">
-						<% if (posts.length > 0) { %> <% posts.forEach(post => { %>
+						<% if (usersList.length > 0) { %> <% usersList.forEach(user => { %>
 						<div class="post">
-							<h4>Post ID: <%= post.id %></h4>
-							<h3><%= post.userId %></h3>
-							<h3><%= post.title %></h3>
-							<p><%= post.description %></p>
-							<h5><%= post.taskDate %></h5>
+							<h4>Post ID: <%= user.id %></h4>
+							<h3><%= user.email %></h3>
+							<p><%= user.fName %></p>
+							<p><%= user.lName %></p>
+							<h5><%= user.password %></h5>
 							<div class="comment-count">
 								<span>Updated</span>
 							</div>
 						</div>
 						<% }); %> <% } else { %>
-						<p>No tasks available.</p>
+						<p><%= errorMessage %></p>
 						<% } %>
 					</div>
 

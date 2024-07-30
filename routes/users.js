@@ -4,7 +4,11 @@ let router = Router()
 import controllers from '../controllers/controllersUsers.js'
 
 router.get('/', controllers.register)
-router.post('/', controllers.fromRegister)
-router.post('/nftIo', controllers.fromLogin)
 router.get('/home', controllers.home)
+router.post('/register', controllers.fromRegister)
+router.post('/login', controllers.fromLogin)
+router.get('/getUsersList', controllers.getUsersList)
+router.get('/getUserProfile', controllers.getUserProfile)
+router.get('/updateUser', controllers.updateUser)
+// router.put('/updateUserProfile', controllers.updateUserProfile)
 export default router

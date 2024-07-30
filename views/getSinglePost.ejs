@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="/stylesheets/styles.css" />
+		<title><%= title %></title>
+	</head>
+	<body>
+		<div id="app-content">
+			<h1><%= title %></h1>
+			<div class="container">
+				<div id="post-list">
+					<% if (postList.length > 0) { %> <% postList.forEach(post => { %>
+					<div class="post">
+						<h4>Post ID: <%= post.id %></h4>
+						<h3><%= post.userId %></h3>
+						<p><%= post.title %></p>
+						<p><%= post.description %></p>
+
+						<div class="comment-count">
+							<span>Updated</span>
+						</div>
+					</div>
+					<% }); %> <% } else { %>
+					<p><%= errorMessage %></p>
+					<% } %>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

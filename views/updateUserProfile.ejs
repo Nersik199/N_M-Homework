@@ -11,7 +11,7 @@
 			<h1 id="app-heading">Create a Task</h1>
 			<div id="app-content">
 				<div class="container">
-					<form id="task-form" method="post" action="/createPost">
+					<form id="task-form" method="put" action="/updateUserProfile">
 						<div class="form-group">
 							<% if(typeof info !== 'undefined') { %>
 							<p
@@ -26,24 +26,23 @@
 
 							<% } %>
 							<label for="task-title">userId:</label>
-							<input type="text" id="task-title" name="userId" required />
+							<input type="text" id="task-title" name="id" required />
 						</div>
 						<div class="form-group">
-							<label for="task-title">Title:</label>
-							<input type="text" id="task-title" name="title" required />
+							<label for="task-title">fName:</label>
+							<input type="text" id="task-title" name="fName" required />
 						</div>
 						<div class="form-group">
-							<label for="task-description">Description:</label>
-							<textarea
-								id="task-description"
-								name="description"
-								rows="5"
-								required
-							></textarea>
+							<label for="task-description">lname:</label>
+							<input type="text" id="task-title" name="lName" required />
 						</div>
 						<div class="form-group">
-							<label for="task-date">Task Date:</label>
-							<input type="date" id="task-date" name="taskDate" required />
+							<label for="task-date">email</label>
+							<input type="email" id="task-date" name="email" required />
+						</div>
+						<div class="form-group">
+							<label for="task-title">password:</label>
+							<input type="password" id="task-title" name="password" required />
 						</div>
 						<% if (typeof errors !== 'undefined') { %>
 						<div class="error-message">
@@ -79,3 +78,4 @@
 		</script>
 	</body>
 </html>
+fName, lName, email, password
