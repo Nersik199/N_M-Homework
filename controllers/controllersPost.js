@@ -11,7 +11,7 @@ async function createPost(req, res) {
 	try {
 		const errors = examinationTask(req)
 		const { userId, title, description, taskDate } = req.body
-
+		await fs.mkdir(postFilePath, { recursive: true })
 		if (errors.haveErrors) {
 			let message = Object.values(errors.fields)
 			res.status(422).render('createPost', {

@@ -1,11 +1,20 @@
 import { v4 as uuid } from 'uuid'
 import md5 from 'md5'
-import fs from 'fs/promises'
 import path from 'path'
 import dotEnv from 'dotenv'
+import fs from 'fs/promises'
+
+const usersFilePath = path.resolve(`./public/users`)
+async function createFolderIfNotExists() {
+	try {
+		await fs.access(usersFilePath)
+		console.log('Folder already exists')
+	} catch (error) {
+		console.log(error)
+	}
+}
 
 dotEnv.config()
-const usersFilePath = path.resolve(`./public/users`)
 import { examinationRegister, examinationLogin } from '../utils/validate.js'
 
 const examinationEmail = async email => {
@@ -26,7 +35,7 @@ const fromRegister = async (req, res) => {
 	try {
 		const errors = examinationRegister(req)
 		const { fName, lName, email, password } = req.body
-
+		await fs.mkdir(usersFilePath, { recursive: true })
 		if (errors.haveErrors) {
 			let message = Object.values(errors.fields)
 			res.status(422).render('register', {
