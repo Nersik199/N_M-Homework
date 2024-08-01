@@ -10,7 +10,6 @@
 		<header class="header" id="header">
 			<nav class="nav container">
 				<a href="http://localhost:3000/home" class="nav__logo">nft.io</a>
-
 				<div class="nav__menu" id="nav-menu">
 					<ul class="nav__list">
 						<li class="nav__item">
@@ -19,23 +18,19 @@
 							>
 						</li>
 						<li class="nav__item">
-							<a href="http://localhost:3000/getTasks" class="nav__link"
-								>All Post</a
+							<a href="http://localhost:3000/getUsersList" class="nav__link"
+								>getUsersList</a
 							>
 						</li>
 						<li class="nav__item">
 							<a href="http://localhost:3000/" class="nav__link">Sign out</a>
 						</li>
 					</ul>
-
-					<!-- close button -->
 					<div class="nav__close" id="nav-close">
 						<i class="ri-close-line"></i>
 					</div>
 					<img src="./images/ethereum-img.png" alt="nav img" class="nav__img" />
 				</div>
-
-				<!-- Toggle button -->
 				<div class="nav__toggle" id="nav-toggle">
 					<i class="ri-menu-4-line"></i>
 				</div>
@@ -44,10 +39,12 @@
 
 		<div id="app">
 			<h1 id="app-heading"><%= title %></h1>
+			<div class="comment-count">
+				<a href="http://localhost:3000/updatePost">Updated post</a>
+			</div>
 			<div class="form-container sign-in-container">
 				<form action="/getSinglePost" method="get">
 					<input type="text" name="id" placeholder="postId" required />
-
 					<% if (typeof errorMessage !== 'undefined') { %>
 					<div class="error-message">
 						<span style="color: rgb(135, 213, 239); font-size: 1rem"
@@ -68,15 +65,11 @@
 							<h3><%= post.title %></h3>
 							<p><%= post.description %></p>
 							<h5><%= post.taskDate %></h5>
-							<div class="comment-count">
-								<span>Updated</span>
-							</div>
 						</div>
 						<% }); %> <% } else { %>
 						<p>No tasks available.</p>
 						<% } %>
 					</div>
-
 					<div class="pagination">
 						<% if (typeof currentPage !== 'undefined' && currentPage > 1) { %>
 						<a href="?page=<%= currentPage - 1 %>">Previous</a>

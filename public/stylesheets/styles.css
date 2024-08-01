@@ -553,7 +553,7 @@ ul {
 	padding-top: 8px;
 }
 
-.comment-count span {
+.comment-count a {
 	display: inline-block;
 	padding: 6px 12px;
 	background-color: #2ecc71;

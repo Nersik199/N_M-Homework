@@ -6,6 +6,7 @@ import dotEnv from 'dotenv'
 
 dotEnv.config()
 const usersFilePath = path.resolve(`./public/users`)
+import { examinationRegister, examinationLogin } from '../utils/validate.js'
 
 const examinationEmail = async email => {
 	const filePath = path.resolve(usersFilePath, `${email}.json`)
@@ -14,13 +15,26 @@ const examinationEmail = async email => {
 		const response = JSON.parse(data)
 		return response.email === email
 	} catch (error) {
+		if (error.code === 'ENOENT') {
+			return false
+		}
 		throw error
 	}
 }
 
 const fromRegister = async (req, res) => {
 	try {
+		const errors = examinationRegister(req)
 		const { fName, lName, email, password } = req.body
+
+		if (errors.haveErrors) {
+			let message = Object.values(errors.fields)
+			res.status(422).render('register', {
+				errors: message,
+			})
+			return
+		}
+
 		const emailExists = await examinationEmail(email)
 		if (emailExists) {
 			return res.render('register', {
@@ -46,19 +60,38 @@ const fromRegister = async (req, res) => {
 		res.status(500).json({ message: error.message, status: 500 })
 	}
 }
+async function usersList() {
+	const files = await fs.readdir(usersFilePath)
+	const listUsers = []
+
+	for (const file of files) {
+		if (path.extname(file) === '.json') {
+			const filePath = path.join(usersFilePath, file)
+			const data = await fs.readFile(filePath, 'utf8')
+			listUsers.push(JSON.parse(data))
+		}
+	}
+	return listUsers
+}
 
 const fromLogin = async (req, res) => {
 	try {
+		const errors = examinationLogin(req)
+
+		if (errors.haveErrors) {
+			let message = Object.values(errors.fields)
+			res.status(422).render('register', {
+				errors: message,
+			})
+			return
+		}
+
 		const { email, password } = req.body
 
-		const filePath = path.resolve(usersFilePath, `${email}.json`)
-		const data = await fs.readFile(filePath, 'utf8')
-		const response = JSON.parse(data)
+		const users = await usersList()
+		const user = users.find(user => user.email === email)
 
-		if (
-			response.email === email &&
-			response.password === md5(md5(password) + process.env.MD5CONFIG)
-		) {
+		if (user && user.password === md5(md5(password) + process.env.MD5CONFIG)) {
 			res.status(200).render('index', {
 				title: 'Responsive NFT website - Bedimcode',
 				homeTitle: 'Discover Collect,',
@@ -78,16 +111,7 @@ const fromLogin = async (req, res) => {
 
 const getUsersList = async (req, res) => {
 	try {
-		const files = await fs.readdir(usersFilePath)
-		const listUsers = []
-
-		for (const file of files) {
-			if (path.extname(file) === '.json') {
-				const filePath = path.join(usersFilePath, file)
-				const data = await fs.readFile(filePath, 'utf8')
-				listUsers.push(JSON.parse(data))
-			}
-		}
+		const listUsers = await usersList()
 		const { page = 1 } = req.query
 		const limit = 5
 
@@ -115,22 +139,48 @@ const getUsersList = async (req, res) => {
 
 const getUserProfile = async (req, res) => {
 	try {
-		const query = req.query
-		const profileUser = []
-		const filePath = path.resolve(usersFilePath, `${query.email}.json`)
+		const { email } = req.query
+		const users = await usersList()
+		const result = users.find(user => user.email === email)
 
-		const data = await fs.readFile(filePath, 'utf8')
-		const response = JSON.parse(data)
-		profileUser.push(response)
-
-		if (response.email === query.email) {
-			res.status(200).render('getUserProfile', {
-				title: 'getUserProfile',
-				usersList: profileUser,
+		if (result) {
+			return res.status(200).render('getUserProfile', {
+				title: 'User Profile',
+				usersList: [result],
 			})
 		}
 	} catch (e) {
 		res.status(500).json({ message: e.message, status: 500 })
+	}
+}
+
+async function findUserById(userId) {
+	const users = await usersList()
+	return users.find(user => user.id === userId)
+}
+
+const updateUserProfile = async (req, res) => {
+	try {
+		const { id, fName, lName, email, password } = req.body
+		const user = await findUserById(id)
+		if (user) {
+			const filePath = path.resolve(usersFilePath, `${user.email}.json`)
+			const newData = {
+				id: id,
+				fName: fName,
+				lName: lName,
+				email: email,
+				password: md5(md5(password) + process.env.MD5CONFIG),
+			}
+			await fs.writeFile(filePath, JSON.stringify(newData, null, 2))
+			res.status(200).json(newData)
+		} else {
+			res.status(404).render('updateUserProfile', {
+				errorMessage: 'User not found',
+			})
+		}
+	} catch (error) {
+		res.status(500).json({ message: error.message, status: 500 })
 	}
 }
 
@@ -160,6 +210,7 @@ export default {
 	fromLogin,
 	getUsersList,
 	getUserProfile,
+	updateUserProfile,
 	register,
 	home,
 	updateUser,

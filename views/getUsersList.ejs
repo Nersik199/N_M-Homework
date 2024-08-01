@@ -59,23 +59,24 @@
 					<button type="submit">getUserProfile</button>
 				</form>
 			</div>
-
+			<div class="comment-count">
+				<a href="http://localhost:3000/updateUserProfile"
+					>Updated User Profile</a
+				>
+			</div>
 			<div id="app-content">
 				<div class="container">
 					<div id="post-list">
 						<% if (usersList.length > 0) { %> <% usersList.forEach(user => { %>
 						<div class="post">
-							<h4>Post ID: <%= user.id %></h4>
+							<h4>User ID: <%= user.id %></h4>
 							<h3><%= user.email %></h3>
 							<p><%= user.fName %></p>
 							<p><%= user.lName %></p>
 							<h5><%= user.password %></h5>
-							<div class="comment-count">
-								<span>Updated</span>
-							</div>
 						</div>
 						<% }); %> <% } else { %>
-						<p><%= errorMessage %></p>
+						<p>No tasks available.</p>
 						<% } %>
 					</div>
 
@@ -97,5 +98,6 @@
 				</div>
 			</div>
 		</div>
+		<script src="./javascripts/update.js"></script>
 	</body>
 </html>

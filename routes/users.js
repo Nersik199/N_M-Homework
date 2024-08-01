@@ -9,6 +9,6 @@ router.post('/register', controllers.fromRegister)
 router.post('/login', controllers.fromLogin)
 router.get('/getUsersList', controllers.getUsersList)
 router.get('/getUserProfile', controllers.getUserProfile)
-router.get('/updateUser', controllers.updateUser)
-// router.put('/updateUserProfile', controllers.updateUserProfile)
+router.get('/updateUserProfile', controllers.updateUser)
+router.put('/updateUserProfile', controllers.updateUserProfile)
 export default router

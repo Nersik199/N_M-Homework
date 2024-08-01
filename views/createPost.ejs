@@ -24,6 +24,17 @@
 								<%= info %>
 							</p>
 
+							<% } %> <% if(typeof errors !== 'undefined') { %>
+							<p
+								style="
+									font-size: 18px;
+									text-align: center;
+									color: rgb(236, 187, 114);
+								"
+							>
+								<%= errors %>
+							</p>
+
 							<% } %>
 							<label for="task-title">userId:</label>
 							<input type="text" id="task-title" name="userId" required />
@@ -45,13 +56,7 @@
 							<label for="task-date">Task Date:</label>
 							<input type="date" id="task-date" name="taskDate" required />
 						</div>
-						<% if (typeof errors !== 'undefined') { %>
-						<div class="error-message">
-							<p style="color: rgb(135, 213, 239); font-size: 18px">
-								<%= errors %>
-							</p>
-						</div>
-						<% } %>
+
 						<button type="submit" class="submit-button">Submit Task</button>
 					</form>
 					<div id="confirmation-message" class="hidden">
