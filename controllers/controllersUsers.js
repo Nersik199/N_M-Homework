@@ -3,19 +3,25 @@ import md5 from 'md5'
 import path from 'path'
 import dotEnv from 'dotenv'
 import fs from 'fs/promises'
+import CryptoJS from 'crypto-js'
 
 const usersFilePath = path.resolve(`./public/users`)
-async function createFolderIfNotExists() {
-	try {
-		await fs.access(usersFilePath)
-		console.log('Folder already exists')
-	} catch (error) {
-		console.log(error)
-	}
-}
 
 dotEnv.config()
 import { examinationRegister, examinationLogin } from '../utils/validate.js'
+
+let tokens = []
+const createToken = (email, id) => {
+	const token = {
+		email: email,
+		id: id,
+	}
+	const secret = process.env.TOKEN_KEY
+	const bytes = CryptoJS.AES.encrypt(JSON.stringify(token), secret).toString()
+	console.log(bytes)
+	tokens.push(bytes)
+	return bytes
+}
 
 const examinationEmail = async email => {
 	const filePath = path.resolve(usersFilePath, `${email}.json`)
@@ -99,8 +105,10 @@ const fromLogin = async (req, res) => {
 
 		const users = await usersList()
 		const user = users.find(user => user.email === email)
-
+		// createToken(user.email, user.id)
 		if (user && user.password === md5(md5(password) + process.env.MD5CONFIG)) {
+			const token = createToken(user.email, user.id)
+			res.setHeader('x-token', `Bearer ${token}`)
 			res.status(200).render('index', {
 				title: 'Responsive NFT website - Bedimcode',
 				homeTitle: 'Discover Collect,',
